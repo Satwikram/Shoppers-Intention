@@ -50,20 +50,20 @@ def predict(request):
         infer = model.signatures["serving_default"]
         print(infer.structured_outputs)
 
-        data = np.array(scaler.fit_transform(np.array([[Administrative,Administrative_Duration,Informational,\
+        data = scaler.fit_transform(np.array([[Administrative,Administrative_Duration,Informational,\
                                               Informational_Duration,ProductRelated,ProductRelated_Duration,
                                               BounceRates,ExitRates,PageValues,SpecialDay,OperatingSystems,
                                               Browser,Region,TrafficType,Dec,Feb,Jul,June,Mar,May,Nov,Oct,
-                                              Sep,Other,Returning_Visitor,Weekend]])))
-        print(type(data))
+                                              Sep,Other,Returning_Visitor,Weekend]], dtype = np.float32))
+        print("My data Type is:",type(data))
 
         result = infer(tf.constant(data))
-        print(result['output_1'][0][0])
+        print("My Prediction is:",result['dense_2'][0][0])
 
-        if result['output_1'][0][0] < .5:
-            output = 'False'
+        if result['dense_2'][0][0] <= .5:
+            output = 'Less Likely to Buy the Product'
         else:
-            output = 'True'
+            output = 'More Like to Buy the product!'
 
         return JsonResponse({"pred": output}, safe=False)
 
