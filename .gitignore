@@ -16,6 +16,8 @@ management
 .idea
 secret.py
 migrations
+content
+scalar.sav
 
 
 
